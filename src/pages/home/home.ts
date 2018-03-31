@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { SocialSharing } from '@ionic-native/social-sharing';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -9,22 +10,33 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 export class HomePage {
   imagedata;
 
-  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, private camera: Camera) {
+  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController, private camera: Camera, private socialSharing: SocialSharing) {
   }
 uploadPressed(){
   let actionSheet = this.actionSheetCtrl.create({
-    title: 'Upload Picture',
+    title: 'Share Picture',
     buttons: [
       {
-        text: 'Delete',
-        role: 'destructive',
+        text: 'Facebook',
         handler: () => {
-          console.log('Destructive clicked');
+          // Check if sharing via email is supported
+         this.socialSharing.shareViaFacebook("Ionic upload 1st Try", this.imagedata).then(() => {
+         // Sharing via email is possible
+         }).catch(() => {
+  // Sharing via email is not possible
+});
+          console.log('Facebook clicked');
         }
       },{
-        text: 'Upload',
+        text: 'Instagram',
         handler: () => {
-          console.log('Archive clicked');
+          // Check if sharing via email is supported
+          this.socialSharing.shareViaInstagram("Ionic upload 1st Try", this.imagedata).then(() => {
+          // Sharing via email is possible
+         }).catch(() => {
+        // Sharing via email is not possible
+});
+          console.log('Instagram clicked');
         }
       },{
         text: 'Cancel',
